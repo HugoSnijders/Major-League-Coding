@@ -2,7 +2,7 @@
 #Command for loading up tidyverse so we can use pipelines etc.
 library(tidyverse)
 
-#The commands to load up the data of all athletes in a sports teams (OG),
+#The commands to load up the data of all athletes in a sports team (OG),
 #all people in the wiki data file from 1800-2016 (wikipeople) and all americans (american).
 OG <- read.csv('full.csv')
 wikipeople <- read_csv("wikipeople.csv", 
@@ -11,13 +11,13 @@ wikipeople <- read_csv("wikipeople.csv",
 american <- read_csv("american.csv", col_types = cols(BirthYear = col_number(), 
                                                       DeathYear = col_number()))
 
-#Three comands to copy the original variable to a new one, so we always have a reserve
+#Three comands to copy the original variable to a new one, so we always have one as backup.
 data <- OG
 all <- wikipeople
 american. <- american
 
 #Step 2: Age column:
-#Three commands to create the age column by subtracting year of birth from year of death
+#Three commands to create the age column by subtracting year of birth from year of death.
 data$age <- data$DeathYear - data$BirthYear
 all$age <- all$DeathYear - all$BirthYear
 american.$age <- american.$DeathYear - american.$BirthYear
@@ -25,7 +25,8 @@ american.$age <- american.$DeathYear - american.$BirthYear
 #Step 3: Filtering:
 #Three pipelines that filter out negative years of birth/death and filters out people that are
 #not in the age range of 18-100. We chose 18 as this is the lowest age at which an athlete got a
-#wikipedia page.
+#wikipedia page, and 100 as it is 2 standard deviations from the average life expectance of 73,
+#which should include 95% of the population.
 data <- data %>%
   filter(DeathYear >= 1800) %>%
   filter(DeathYear <= 2018) %>%
@@ -83,9 +84,9 @@ ggplot() +
   geom_point(data = data.american, mapping = aes(x=BirthYear, y=avg.exp, colour='American'))
 
 #Steps we ended up not taking:
-#These cammands creates variables for certain age groups that increase in increments of 10 years.
+#These cammands create variables for certain age groups that increase in increments of 10 years.
 #So U30 = people under 30 years old, U40 = people of age between 30 and 40 and so on.
-#We did this both for all people in a sports team and for American baseball and football players.
+#We did this for all people in a sports team and for American baseball and football players.
 U30 <- data %>%
   filter(age < 30)
 U40 <- data %>% 
