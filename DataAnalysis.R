@@ -49,20 +49,7 @@ american. <- american. %>%
   filter(age >= 18 ) %>%
   filter(age <= 100)
 
-#Step 4: Calculating life expectancy:
-#Three pipelines that first group our data by birth year (for life expectance per year), then
-#creates a column with the life expectancy by calculating the mean age of that year.
-data <- data %>%
-  group_by(BirthYear) %>%
-  mutate(avg.exp = (mean(age, na.rm = TRUE)))
-all <- all %>%
-  group_by(BirthYear) %>%
-  mutate(avg.exp = (mean(age, na.rm = TRUE))) 
-american. <- american. %>%
-  group_by(BirthYear) %>%
-  mutate(avg.exp = (mean(age, na.rm = TRUE)))
-
-#Step 5: More filtering:
+#Step 4: More filtering:
 #The first 2 commands are used to filter for American baseball and football players.
 #The 3rd and 4th command exclude any referees or coaches in our data
 #The last command filters for american people.
@@ -72,6 +59,22 @@ data.football <- dplyr::filter(data, grepl('American Football|American football'
 data.baseball <- dplyr::filter(data.baseball, !grepl('coach|Coach|referee', Description))
 data.football <- dplyr::filter(data.football, !grepl('coach|Coach|referee', Description))
 data.american <- dplyr::filter(american., grepl('American|american', Description))
+
+#Step 5: Calculating life expectancy:
+#Three pipelines that first group our data by birth year (for life expectance per year), then
+#creates a column with the life expectancy by calculating the mean age of that year.
+data.baseball <- data.baseball %>%
+  group_by(BirthYear) %>%
+  mutate(avg.exp = (mean(age, na.rm = TRUE)))
+data.football <- data.football %>%
+  group_by(BirthYear) %>%
+  mutate(avg.exp = (mean(age, na.rm = TRUE)))
+all <- all %>%
+  group_by(BirthYear) %>%
+  mutate(avg.exp = (mean(age, na.rm = TRUE))) 
+data.american <- data.american %>%
+  group_by(BirthYear) %>%
+  mutate(avg.exp = (mean(age, na.rm = TRUE)))
 
 #Step 6: Plotting:
 #This command plots 4 scatter plots in one graph, showing correlation between birth year and
